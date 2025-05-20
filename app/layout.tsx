@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Link from "next/link";
+import { Home, Users, BarChart } from "lucide-react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,9 +27,27 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
-        {children}
+        <main className="flex-1 pb-16">
+          {children}
+        </main>
+        <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
+          <div className="flex justify-around items-center h-16">
+            <Link href="/" className="flex flex-col items-center text-sm">
+              <Home className="h-6 w-6" />
+              <span>主页</span>
+            </Link>
+            <Link href="/customers" className="flex flex-col items-center text-sm">
+              <Users className="h-6 w-6" />
+              <span>客户</span>
+            </Link>
+            <Link href="/statistics" className="flex flex-col items-center text-sm">
+              <BarChart className="h-6 w-6" />
+              <span>统计</span>
+            </Link>
+          </div>
+        </nav>
       </body>
     </html>
   );
