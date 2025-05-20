@@ -51,7 +51,7 @@ export async function GET(request: Request) {
     const customerCode = searchParams.get('customerCode');
 
     // 构建查询条件
-    const query: Record<string, any> = {};
+    const query: Record<string, { $gte?: Date; $lte?: Date } | string> = {};
     if (date) {
       const startDate = new Date(date);
       startDate.setHours(0, 0, 0, 0);

@@ -1,10 +1,21 @@
 import * as XLSX from 'xlsx';
 
+interface Customer {
+  name: string;
+  code: string;
+}
+
+interface DataItem {
+  date?: Date | string;
+  customer?: Customer;
+  [key: string]: string | number | Date | Customer | undefined;
+}
+
 interface ExportOptions {
   filename: string;
   sheetName?: string;
   headers: string[];
-  data: any[];
+  data: DataItem[];
   columnKeys: string[];
 }
 
@@ -17,23 +28,23 @@ export function exportToExcel({
 }: ExportOptions) {
   // 准备数据
   const exportData = data.map(item => {
-    const row: Record<string, any> = {};
+    const row: Record<string, string | number> = {};
     columnKeys.forEach((key, index) => {
       // 处理日期
       if (key === 'date') {
-        row[headers[index]] = new Date(item[key]).toLocaleDateString();
+        row[headers[index]] = new Date(item[key] as Date | string).toLocaleDateString();
       }
       // 处理数字
       else if (typeof item[key] === 'number') {
-        row[headers[index]] = item[key].toLocaleString();
+        row[headers[index]] = (item[key] as number).toLocaleString();
       }
       // 处理客户名称
       else if (key === 'customer') {
-        row[headers[index]] = item[key].name;
+        row[headers[index]] = (item[key] as Customer).name;
       }
       // 其他字段
       else {
-        row[headers[index]] = item[key];
+        row[headers[index]] = item[key] as string;
       }
     });
     return row;
@@ -52,4 +63,4 @@ export function exportToExcel({
 
   // 导出文件
   XLSX.writeFile(wb, `${filename}.xlsx`);
-} 
+}
